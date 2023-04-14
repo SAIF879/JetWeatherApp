@@ -1,5 +1,6 @@
 package com.example.jetweatherapp.network
 
+import com.example.jetweatherapp.model.Weather
 import com.example.jetweatherapp.model.WeatherItem
 import com.example.jetweatherapp.model.WeatherObject
 import com.example.jetweatherapp.utils.Constants.API_KEY
@@ -16,5 +17,5 @@ interface WeatherApi {
         @Query("q") query: String,
         @Query("units") units: String = "imperial",
         @Query("appid") appid : String = API_KEY
-    ): WeatherObject
+    ): Weather
 }
