@@ -13,12 +13,14 @@ import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.example.jetweatherapp.R
 import com.example.jetweatherapp.data.DataOrException
 import com.example.jetweatherapp.model.Weather
 import com.example.jetweatherapp.utils.formatDate
@@ -50,21 +52,21 @@ fun MainScaffold(weather: Weather , navController: NavController)
 {
     
   Scaffold(topBar = { WeatherAppBar(title =  weather.city.name + " ,  ${weather.city.country}", icon = Icons.Default.Search,navController = navController , elevation = 5.dp)}) {
-      MainContent(data = weather)
+      MainContent(weatherItem = weather)
   }
 
 }
 
 @Composable
-fun MainContent(data: Weather) {
-   val  imageUrl = "https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png"
+fun MainContent(weatherItem: Weather) {
+   val  imageUrl = "https://openweathermap.org/img/wn/${weatherItem.list[0].weather[0].icon}.png"
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     , modifier = Modifier.fillMaxWidth()
     ) {
         Text(
-            text = formatDate(data.list[0].dt),
+            text = formatDate(weatherItem.list[0].dt),
             style = MaterialTheme.typography.caption,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colors.onSecondary,
@@ -77,11 +79,35 @@ fun MainContent(data: Weather) {
             Column(verticalArrangement = Arrangement.Center , horizontalAlignment = Alignment.CenterHorizontally) {
                 //image
                 WeatherStateImage(imageUrl = imageUrl)
-                Text(text = formatDecimals(data.list[0].temp.day) +"°"+"f", style = MaterialTheme.typography.h4 , fontWeight = FontWeight.Bold)
-                Text(text = data.list[0].weather[0].main , fontStyle = FontStyle.Italic )
+                Text(text = formatDecimals(weatherItem.list[0].temp.day) +"°"+"f", style = MaterialTheme.typography.h4 , fontWeight = FontWeight.Bold)
+                Text(text = weatherItem.list[0].weather[0].main , fontStyle = FontStyle.Italic )
                 
             }
             
+        }
+        HumidityWindPressureRow(weather = weatherItem)
+    }
+
+
+}
+
+@Composable
+fun HumidityWindPressureRow(weather: Weather) {
+    Row(modifier = Modifier
+        .padding(12.dp)
+        .fillMaxWidth() , verticalAlignment = Alignment.CenterVertically , horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(modifier = Modifier.padding(4.dp)) {
+           //icon
+            Text(text = "${weather.list[0].humidity} %"  , style = MaterialTheme.typography.caption)
+        }
+        Row() {
+            //icon
+            Text(text = "${weather.list[0].pressure} psi"  , style = MaterialTheme.typography.caption)
+            
+        }
+        Row() {
+            //icon
+            Text(text = "${weather.list[0].humidity} mph"  , style = MaterialTheme.typography.caption)
         }
     }
 }
