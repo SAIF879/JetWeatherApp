@@ -21,6 +21,8 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.jetweatherapp.data.DataOrException
 import com.example.jetweatherapp.model.Weather
+import com.example.jetweatherapp.utils.formatDate
+import com.example.jetweatherapp.utils.formatDecimals
 import com.example.jetweatherapp.widgets.WeatherAppBar
 
 @Composable
@@ -62,7 +64,7 @@ fun MainContent(data: Weather) {
     , modifier = Modifier.fillMaxWidth()
     ) {
         Text(
-            text = "Nov 29",
+            text = formatDate(data.list[0].dt),
             style = MaterialTheme.typography.caption,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colors.onSecondary,
@@ -75,8 +77,8 @@ fun MainContent(data: Weather) {
             Column(verticalArrangement = Arrangement.Center , horizontalAlignment = Alignment.CenterHorizontally) {
                 //image
                 WeatherStateImage(imageUrl = imageUrl)
-                Text(text = "56" , style = MaterialTheme.typography.h4 , fontWeight = FontWeight.Bold)
-                Text(text = "Snow" , fontStyle = FontStyle.Italic )
+                Text(text = formatDecimals(data.list[0].temp.day) +"°"+"f", style = MaterialTheme.typography.h4 , fontWeight = FontWeight.Bold)
+                Text(text = data.list[0].weather[0].main , fontStyle = FontStyle.Italic )
                 
             }
             
