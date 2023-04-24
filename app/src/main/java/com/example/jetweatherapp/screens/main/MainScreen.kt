@@ -1,9 +1,11 @@
 package com.example.jetweatherapp.screens.main
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -13,20 +15,17 @@ import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.rememberImagePainter
-import com.example.jetweatherapp.R
+
 import com.example.jetweatherapp.data.DataOrException
 import com.example.jetweatherapp.model.Weather
 import com.example.jetweatherapp.utils.formatDate
-import com.example.jetweatherapp.utils.formatDateTime
 import com.example.jetweatherapp.utils.formatDecimals
-import com.example.jetweatherapp.widgets.WeatherAppBar
+import com.example.jetweatherapp.widgets.*
 
 @Composable
 fun MainScreen(navController: NavController, mainViewModel: MainViewModel = hiltViewModel()){
@@ -89,54 +88,19 @@ fun MainContent(weatherItem: Weather) {
         HumidityWindPressureRow(weather = weatherItem)
         Divider()
         SunSetSunRiseRow(weather = weatherItem)
-    }
-
-
-}
-
-@Composable
-fun SunSetSunRiseRow(weather: Weather) {
-    Row(modifier = Modifier
-        .padding(12.dp)
-        .fillMaxWidth() , verticalAlignment = Alignment.CenterVertically , horizontalArrangement = Arrangement.SpaceBetween) {
-        Row() {
-            //Icon
-            //sunrise
-       Text(text = formatDateTime(weather.list[0].sunrise) , style = MaterialTheme.typography.caption )
-        }
-        Row() {
-            //Icon
-            //sunset
-        Text(text = formatDateTime(weather.list[0].sunset) , style = MaterialTheme.typography.caption)
-
-
-        }
-        
-    }
-}
-
-@Composable
-fun HumidityWindPressureRow(weather: Weather) {
-    Row(modifier = Modifier
-        .padding(12.dp)
-        .fillMaxWidth() , verticalAlignment = Alignment.CenterVertically , horizontalArrangement = Arrangement.SpaceBetween) {
-        Row(modifier = Modifier.padding(4.dp)) {
-           //icon
-            Text(text = "${weather.list[0].humidity} %"  , style = MaterialTheme.typography.caption)
-        }
-        Row() {
-            //icon
-            Text(text = "${weather.list[0].pressure} psi"  , style = MaterialTheme.typography.caption)
-            
-        }
-        Row() {
-            //icon
-            Text(text = "${weather.list[0].humidity} mph"  , style = MaterialTheme.typography.caption)
+        Text(text = "This Week ")
+        Surface(modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(), color = Color(0xffEEF1EF), shape = RoundedCornerShape(14.dp)) {
+            LazyColumn(modifier = Modifier.padding(2.dp) , contentPadding = PaddingValues(1.dp)){
+                items(weatherItem.list){
+                    WeatherDetailRow(weather = it )
+                    
+                }
+            }
         }
     }
+
+
 }
 
-@Composable
-fun WeatherStateImage(imageUrl: String) {
-    Image(painter = rememberImagePainter( imageUrl), contentDescription ="icon_image"  , modifier = Modifier.size(80.dp))
-}
