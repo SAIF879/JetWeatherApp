@@ -1,6 +1,7 @@
 package com.example.jetweatherapp.screens.main
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.example.jetweatherapp.data.DataOrException
 import com.example.jetweatherapp.model.Weather
 import com.example.jetweatherapp.widgets.WeatherAppBar
@@ -53,7 +55,7 @@ fun MainScaffold(weather: Weather , navController: NavController)
 
 @Composable
 fun MainContent(data: Weather) {
-   val  imageUrl = "https://openweathermap.org/img/wn/ ${data.list[0].weather[0].icon}.png"
+   val  imageUrl = "https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png"
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -84,5 +86,5 @@ fun MainContent(data: Weather) {
 
 @Composable
 fun WeatherStateImage(imageUrl: String) {
-    TODO("Not yet implemented")
+    Image(painter = rememberImagePainter( imageUrl), contentDescription ="icon_image"  , modifier = Modifier.size(80.dp))
 }
