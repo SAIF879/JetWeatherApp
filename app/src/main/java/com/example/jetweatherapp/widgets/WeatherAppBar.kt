@@ -32,10 +32,12 @@ fun WeatherAppBar(
     TopAppBar(title = { Text(text = title , color =  MaterialTheme.colors.onSecondary , style = TextStyle(fontWeight = FontWeight.Bold , fontSize = 15.sp)) },
         actions = {
                   if (isMainScreen) {
-                      IconButton(onClick = { /*TODO*/ }) {
+                      IconButton(onClick = { onAddActionClicked.invoke() }) {
                          androidx.compose.material.Icon(imageVector = Icons.Default.Search, contentDescription ="Search_icon" )
                       }
-                  androidx.compose.material.Icon(imageVector = Icons.Rounded.MoreVert, contentDescription ="dotted _ line" )
+                 IconButton(onClick = {  }) {
+                     androidx.compose.material.Icon(imageVector = Icons.Rounded.MoreVert, contentDescription ="dotted _ line" )
+                 }
                   }
             else  Box{}
         },

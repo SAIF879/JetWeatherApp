@@ -7,8 +7,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
@@ -23,17 +21,22 @@ import androidx.navigation.NavController
 
 import com.example.jetweatherapp.data.DataOrException
 import com.example.jetweatherapp.model.Weather
+import com.example.jetweatherapp.navigation.WeatherScreens
 import com.example.jetweatherapp.utils.formatDate
 import com.example.jetweatherapp.utils.formatDecimals
 import com.example.jetweatherapp.widgets.*
 
 @Composable
-fun MainScreen(navController: NavController, mainViewModel: MainViewModel = hiltViewModel()){
+fun MainScreen(
+    navController: NavController,
+    mainViewModel: MainViewModel = hiltViewModel(),
+    city: String?
+){
 
     val weatherData = produceState<DataOrException<Weather , Boolean ,Exception>>(
         initialValue = DataOrException(loading = true  )
     ){
-        value = mainViewModel.getWeatherData("Ranchi")
+        value = mainViewModel.getWeatherData(city=city.toString())
     }.value
 
     if (weatherData.loading==true){
@@ -50,10 +53,17 @@ fun MainScreen(navController: NavController, mainViewModel: MainViewModel = hilt
 @Composable
 fun MainScaffold(weather: Weather , navController: NavController)
 {
-    
-  Scaffold(topBar = { WeatherAppBar(title =  weather.city.name + " ,  ${weather.city.country}", icon = Icons.Default.Search,navController = navController , elevation = 5.dp)}) {
-      MainContent(weatherItem = weather)
-  }
+
+    Scaffold(topBar = {
+        WeatherAppBar(
+            title = weather.city.name + " ,  ${weather.city.country}",
+            navController = navController,
+            onAddActionClicked = {navController.navigate(WeatherScreens.SearchScreen.name)},
+            elevation = 5.dp
+        )
+    }) {
+        MainContent(weatherItem = weather)
+    }
 
 }
 
