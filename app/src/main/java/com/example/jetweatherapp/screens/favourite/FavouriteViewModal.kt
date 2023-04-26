@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class FavouriteViewModal @Inject constructor(repository: WeatherDbRepository) : ViewModel() {
+class FavouriteViewModal @Inject constructor(private  val repository: WeatherDbRepository) : ViewModel() {
 
     private val _favList = MutableStateFlow<List<Favourite>>(emptyList())
     val favList = _favList.asStateFlow()
@@ -34,22 +34,20 @@ class FavouriteViewModal @Inject constructor(repository: WeatherDbRepository) : 
             }
         }
 
-
-        fun getFavoritesById(city: String) =
-            viewModelScope.launch { repository.getFavoritesById(city = city) }
-
-        fun insertFavorite(favourite: Favourite) =
-            viewModelScope.launch { repository.insertFavorite(favourite = favourite) }
-
-        fun updateFavorite(favourite: Favourite) =
-            viewModelScope.launch { repository.updateFavorite(favourite = favourite) }
-
-        fun deleteAllFavourite() = viewModelScope.launch { repository.deleteAllFavourite() }
-
-        fun deleteFavorite(favourite: Favourite) =
-            viewModelScope.launch { repository.deleteFavorite(favourite = favourite) }
-
-
     }
+
+    fun getFavoritesById(city: String) =
+        viewModelScope.launch { repository.getFavoritesById(city = city) }
+
+    fun insertFavorite(favourite: Favourite) =
+        viewModelScope.launch { repository.insertFavorite(favourite = favourite) }
+
+    fun updateFavorite(favourite: Favourite) =
+        viewModelScope.launch { repository.updateFavorite(favourite = favourite) }
+
+    fun deleteAllFavourite() = viewModelScope.launch { repository.deleteAllFavourite() }
+
+    fun deleteFavorite(favourite: Favourite) =
+        viewModelScope.launch { repository.deleteFavorite(favourite = favourite) }
 
 }

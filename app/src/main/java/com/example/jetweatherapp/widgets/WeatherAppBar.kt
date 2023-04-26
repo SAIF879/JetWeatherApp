@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
@@ -18,8 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.jetweatherapp.model.Favourite
 import com.example.jetweatherapp.navigation.WeatherScreens
+import com.example.jetweatherapp.screens.favourite.FavouriteViewModal
 
 
 @Composable
@@ -29,6 +33,7 @@ fun WeatherAppBar(
     isMainScreen : Boolean = true ,
     elevation : Dp = 0.dp,
     navController: NavController,
+    favouriteViewModal: FavouriteViewModal = hiltViewModel(),
     onAddActionClicked : () -> Unit = {},
     onButtonClicked : () -> Unit = {}
 
@@ -60,6 +65,15 @@ fun WeatherAppBar(
                     contentDescription = "",
                     tint = MaterialTheme.colors.onSecondary,
                     modifier = Modifier.clickable { onButtonClicked.invoke() })
+            }
+
+            if (isMainScreen){
+                Icon(imageVector = Icons.Default.Favorite, contentDescription =""  , modifier = Modifier.scale(0.9f).clickable {
+                    val dataList = title.split(",")
+            favouriteViewModal.insertFavorite(favourite = Favourite(
+                city = dataList[0] , country = dataList[1]))
+                } , tint = Color.Red.copy(0.5f))
+
             }
         },
         backgroundColor = Color.Transparent,
