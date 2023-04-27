@@ -13,6 +13,7 @@ import com.example.jetweatherapp.screens.main.MainScreen
 import com.example.jetweatherapp.screens.main.MainViewModel
 import com.example.jetweatherapp.screens.search.SearchScreen
 import com.example.jetweatherapp.screens.settings.SettingsScreen
+import com.example.jetweatherapp.screens.settings.SettingsViewModal
 import com.example.jetweatherapp.screens.splash.WeatherSplashScreen
 
 @Composable
@@ -28,7 +29,8 @@ fun WeatherNavigation() {
         composable("$route/{city}" , arguments = listOf(navArgument(name = "city"){type = NavType.StringType})){navBack->
             navBack.arguments?.getString("city").let{city ->
                 val mainViewModel = hiltViewModel<MainViewModel>()
-                MainScreen(navController = navController, mainViewModel, city = city)
+                val settingsViewModel = hiltViewModel<SettingsViewModal>()
+                MainScreen(navController = navController, mainViewModel,settingsViewModel , city = city)
             }
             
         }

@@ -1,6 +1,7 @@
 package com.example.jetweatherapp.screens.main
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,7 +10,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +25,7 @@ import androidx.navigation.NavController
 import com.example.jetweatherapp.data.DataOrException
 import com.example.jetweatherapp.model.Weather
 import com.example.jetweatherapp.navigation.WeatherScreens
+import com.example.jetweatherapp.screens.settings.SettingsViewModal
 import com.example.jetweatherapp.utils.formatDate
 import com.example.jetweatherapp.utils.formatDecimals
 import com.example.jetweatherapp.widgets.*
@@ -30,23 +34,48 @@ import com.example.jetweatherapp.widgets.*
 fun MainScreen(
     navController: NavController,
     mainViewModel: MainViewModel = hiltViewModel(),
+    settingViewModal : SettingsViewModal = hiltViewModel(),
     city: String?
 ){
-
-    val weatherData = produceState<DataOrException<Weather , Boolean ,Exception>>(
-        initialValue = DataOrException(loading = true  )
-    ){
-        value = mainViewModel.getWeatherData(city=city.toString())
-    }.value
-
-    if (weatherData.loading==true){
-        CircularProgressIndicator()}
-
-
-    else if(weatherData.data!=null){
-//
-        MainScaffold(weather = weatherData.data!! , navController = navController)
+    val currentCity : String = if (city!!.isBlank()) "Seattle" else city
+    val unitFromDb = settingViewModal.unitList.collectAsState().value
+    var unit by remember {
+            mutableStateOf("imperial")
     }
+    var isImperial by remember{
+        mutableStateOf(false)
+    }
+    if (unitFromDb.isNullOrEmpty()){
+
+        unit="imperial"
+    }else{
+        unit = unitFromDb[0].unit.split(" ")[0].lowercase()
+        Log.d("fsdfsfsf", "MainScreen:${unitFromDb[0].unit.split("")[0].lowercase()} ")
+    }
+
+
+
+        isImperial = unit =="imperial"
+
+
+        val weatherData = produceState<DataOrException<Weather , Boolean ,Exception>>(
+            initialValue = DataOrException(loading = true  )
+        ){
+            value = mainViewModel.getWeatherData(city=city.toString() , units = unit)
+        }.value
+
+        if (weatherData.loading==true){
+            CircularProgressIndicator()}
+
+
+        else if(weatherData.data!=null){
+//
+            MainScaffold(weather = weatherData.data!! , navController = navController)
+        }
+
+
+
+
 }
 
 @SuppressLint("ProduceStateDoesNotAssignValue", "UnusedMaterialScaffoldPaddingParameter")

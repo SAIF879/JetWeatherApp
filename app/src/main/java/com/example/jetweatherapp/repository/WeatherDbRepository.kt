@@ -23,15 +23,15 @@ class WeatherDbRepository @Inject constructor(private val weatherDao: WeatherDao
 
     // Unit --> Settings get insert update delete deleteAll
 
-    fun getUnits() : Flow<List<Unit>>  = weatherDao.getUnits()
+    fun getUnits() : Flow<List<com.example.jetweatherapp.model.Unit>>  = weatherDao.getUnits()
 
-    suspend fun insertUnit(unit : Unit) = weatherDao.insertUnit(unit = unit)
+    suspend fun insertUnit(unit : com.example.jetweatherapp.model.Unit) = weatherDao.insertUnit(unit = unit)
 
-    suspend fun updateUnit(unit : Unit) = weatherDao.updateUnit(unit = unit)
+    suspend fun updateUnit(unit : com.example.jetweatherapp.model.Unit) = weatherDao.updateUnit(unit = unit)
 
     suspend fun deleteAllUnit() = weatherDao.deleteAllUnits()
 
-    suspend fun deleteUnit(unit : Unit) = weatherDao.deleteUnit(unit = unit)
+    suspend fun deleteUnit(unit : com.example.jetweatherapp.model.Unit) = weatherDao.deleteUnit(unit = unit)
 
 
 
